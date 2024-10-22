@@ -19,13 +19,13 @@ module Iterable
     # Update user data or adds a user if missing. Data is merged - missing
     # fields are not deleted
     #
-    # @param email [String] User email to update or create
+    # @param email [String] (optional) User email used to identify user
     # @param attrs [Hash] Additional data to update or add
     #
     # @return [Iterable::Response] A response object
     sig do
       params(
-        email: String,
+        email: T.nilable(String),
         attrs: T::Hash[
           T.any(Symbol, String),
           T.any(T::Boolean, String, Integer, Float, NilClass)
@@ -33,7 +33,7 @@ module Iterable
       ).returns(Iterable::Response)
     end
     def update(email, attrs = {})
-      attrs['email'] = email
+      attrs['email'] = email if email
       Iterable.request(conf, '/users/update').post(attrs)
     end
 
@@ -66,13 +66,13 @@ module Iterable
     # Update user subscriptions. Overwrites existing data if the field is
     # provided and not null
     #
-    # @param email [String] User email to update
+    # @param email [String] (optional) User email used to identify user
     # @param attrs [Hash] Additional data to update
     #
     # @return [Iterable::Response] A response object
     sig do
       params(
-        email: String,
+        email: T.nilable(String),
         attrs: T::Hash[
           T.any(Symbol, String),
           T.any(T::Boolean, String, Integer, Float)
@@ -80,7 +80,7 @@ module Iterable
       ).returns(Iterable::Response)
     end
     def update_subscriptions(email, attrs = {})
-      attrs['email'] = email
+      attrs['email'] = email if email
       Iterable.request(conf, '/users/updateSubscriptions').post(attrs)
     end
 
